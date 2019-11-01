@@ -11,6 +11,9 @@
 
     <idea-version since-build="131"/>
 
+    <depends>com.intellij.modules.lang</depends>
+
+
     <extensions defaultExtensionNs="com.intellij">
 <!--         Add your extensions here -->
     </extensions>
