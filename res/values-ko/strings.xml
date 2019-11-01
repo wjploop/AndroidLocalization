@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resources>
+  <string name="apple">사과</string>
+  <string name="peach">복숭아</string>
+  <string name="banana">코크스</string>
+  <string name="orange">오렌지</string>
+  <string name="China">중국</string>
+
+</resources>

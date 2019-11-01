@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resources> 
+  <string name="apple">苹果</string>  
+  <string name="peach">桃子果子</string>  
+  <string name="banana">焦耳</string>  
+  <string name="orange">橙子</string>  
+  <string name="China">中国</string>  
+  <string name="city">城市</string>
+</resources>
