@@ -10,4 +10,5 @@ enum class Language(
     ChineseTraditional("ChineseTraditional","cht","zh-rTW"),
     Japanese("Japanese","jp","ja"),
     Korean("Korean","kor","ko")
+
 }
