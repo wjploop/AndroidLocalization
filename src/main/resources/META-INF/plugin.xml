@@ -9,7 +9,7 @@
     <p>Filter the srtring item that have been translated </p>
     ]]></description>
 
-    <idea-version since-build="131"/>
+<!--    <idea-version since-build="141"/>-->
 
     <depends>com.intellij.modules.lang</depends>
 

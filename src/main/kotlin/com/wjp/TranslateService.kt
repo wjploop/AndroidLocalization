@@ -15,7 +15,7 @@ import java.io.FileOutputStream
 import kotlin.concurrent.thread
 
 
-class TranslateService(val filePath: String, val fromLang: Language, val toLangs: List<Language>) {
+class TranslateService(val filePath: String, val fromLang: Language, val toLangs: List<Language>,appId:String,privateKey:String) {
 
     lateinit var fromDoc: Document
     var targetDocList = ArrayList<Document>(toLangs.size)
@@ -172,14 +172,14 @@ class TranslateService(val filePath: String, val fromLang: Language, val toLangs
 }
 
 fun main() {
-    val service = TranslateService(
-        "res/values/strings.xml", Language.English, listOf(
-            Language.ChineseTraditional,
-            Language.English,
-            Language.Japanese,
-            Language.Korean
-        )
-    )
+//    val service = TranslateService(
+//        "res/values/strings.xml", Language.English, listOf(
+//            Language.ChineseTraditional,
+//            Language.English,
+//            Language.Japanese,
+//            Language.Korean
+//        )
+//    )
 
-    service.traslate()
+//    service.traslate()
 }
