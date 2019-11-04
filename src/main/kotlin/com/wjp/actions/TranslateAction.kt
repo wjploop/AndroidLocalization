@@ -21,7 +21,7 @@ class TranslateAction:AnAction("Translate to you want") {
 //            )
 //        )
 //        service.traslate()
-        ConfigureDialog(e.project).show()
+        ConfigureDialog(e.project!!,file.path).show()
     }
 
     override fun update(e: AnActionEvent) {

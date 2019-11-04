@@ -11,7 +11,12 @@ enum class Language(
     ChineseSimplified("ChineseSimplified", "zh", "zh"),
     ChineseTraditional("ChineseTraditional", "cht", "zh-rTW"),
     Japanese("Japanese", "jp", "ja"),
-    Korean("Korean", "kor", "ko");
+    Korean("Korean", "kor", "ko"),
+    Russian("Russian","ru","ru"),
+    German ("German","de","de"),
+    French("French","fra","fr"),
+    Italian("Italian","it","it"),
+    Thai("Thai","th","th")
 
 }
 

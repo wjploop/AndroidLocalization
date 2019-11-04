@@ -15,7 +15,7 @@ import java.io.FileOutputStream
 import kotlin.concurrent.thread
 
 
-class TranslateService(val filePath: String, val fromLang: Language, val toLangs: List<Language>,appId:String,privateKey:String) {
+class TranslateService(val filePath: String,  val toLangs: List<Language>,val appId:String,val privateKey:String) {
 
     lateinit var fromDoc: Document
     var targetDocList = ArrayList<Document>(toLangs.size)
@@ -23,10 +23,13 @@ class TranslateService(val filePath: String, val fromLang: Language, val toLangs
 
     val fromString = LinkedHashMap<String, String>()
 
+    lateinit var httpClient: OkHttpClient
+
 
     var xmlFormat = OutputFormat.createPrettyPrint()
 
     init {
+        httpClient=OkHttpClient()
         readData()
 
         createFileIfNeed()
@@ -55,7 +58,7 @@ class TranslateService(val filePath: String, val fromLang: Language, val toLangs
 
                 if (!containedThisKey) {
                     currentDocShouldByMotify=true
-                    val targetLangValue=translate(value.toString(),fromLang.codeForApi,toLangs[index].codeForApi)
+                    val targetLangValue=translate(value.toString(),"auto",toLangs[index].codeForApi)
                     doc.rootElement.addElement("string").apply {
                         addAttribute("name",key.toString())
                         text=targetLangValue
@@ -127,12 +130,11 @@ class TranslateService(val filePath: String, val fromLang: Language, val toLangs
 
     fun translate(source: String, fromLang: String, toLang: String):String {
         val sign =
-            md5(APPID + source + SALT + PRIVATEKEY)
-        val httpClient = OkHttpClient()
+            md5(appId + source + SALT + privateKey)
         val url = URL + "q=${URLEncoder.encode(
             source,
             "utf-8"
-        )}&from=${fromLang}&to=${toLang}&appid=$APPID&salt=$SALT&sign=${sign}"
+        )}&from=${fromLang}&to=${toLang}&appid=$appId&salt=$SALT&sign=${sign}"
         val request = Request.Builder().url(url).addHeader(
             "User-Agent","Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:0.9.4)"
         ).build()
@@ -149,8 +151,8 @@ class TranslateService(val filePath: String, val fromLang: Language, val toLangs
     }
 
     companion object {
-        const val APPID = "20191026000344502"
-        const val PRIVATEKEY = "uH5a9XtbyYCJ4BeKkZUF"
+//        const val APPID = "20191026000344502"
+//        const val PRIVATEKEY = "uH5a9XtbyYCJ4BeKkZUF"
         const val SALT = "qwer1234"
         const val URL = "http://api.fanyi.baidu.com/api/trans/vip/translate?"
     }

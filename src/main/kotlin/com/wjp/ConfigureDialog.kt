@@ -4,16 +4,26 @@ import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.Messages
+import com.intellij.uiDesigner.core.GridConstraints
+import com.intellij.uiDesigner.core.GridLayoutManager
 import java.awt.BorderLayout
 import java.awt.Container
 import java.awt.GridLayout
+import java.awt.TextField
 import java.awt.event.ItemEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.*
 
-class ConfigureDialog(val project: Project?) : DialogWrapper(project, true) {
+class ConfigureDialog(val project: Project,val filePath:String) : DialogWrapper(project, true) {
 
+    lateinit var input_app_id:JTextField
+    lateinit var input_private_key:JTextField
+
+    private var appId=""
+    private var privateKey=""
+
+    private lateinit var properties: PropertiesComponent
 
     val selectedLang = mutableListOf<Language>()
 
@@ -26,9 +36,12 @@ class ConfigureDialog(val project: Project?) : DialogWrapper(project, true) {
     override fun createCenterPanel(): JComponent? {
         val panel = JPanel(BorderLayout(16, 6))
         val container = Container()
-        val properties = PropertiesComponent.getInstance(project)
-        val token = properties.getValue("key_baidu_token", "")
+        properties = PropertiesComponent.getInstance(project)
         val toLangsString = properties.getValue("key_to_languages", "")
+
+        appId=properties.getValue("key_app_id","")
+        privateKey=properties.getValue("key_private_key","")
+
 
         val supportLangs = Language.values()
 
@@ -54,11 +67,9 @@ class ConfigureDialog(val project: Project?) : DialogWrapper(project, true) {
         }
         panel.add(container, BorderLayout.CENTER)
         val tokenInput=Container().apply {
-            layout=GridLayout(2,2)
-            add(JLabel("Token of Baidu Translate:"))
-            add(JTextField())
-            val baiduStr="http:www.baidu.com"
-            add(JLabel("<html><a href='$baiduStr'>baidu</a></html>").apply {
+            layout=GridLayout(3,2)
+            val baiduStr="http://api.fanyi.baidu.com/api/trans/product/index"
+            add(JLabel("<html>请进入<a href='$baiduStr'>百度翻译开放平台</a>，获取输入以下信息</html>").apply {
                 addMouseListener(object:MouseAdapter(){
                     override fun mouseClicked(e: MouseEvent?) {
                         try{
@@ -69,6 +80,20 @@ class ConfigureDialog(val project: Project?) : DialogWrapper(project, true) {
                     }
                 })
             })
+            add(JLabel())
+
+            add(JLabel("APP ID："))
+            add(JTextField().apply {
+                input_app_id=this
+                text=appId
+
+            })
+            add(JLabel("密钥："))
+            add(JTextField().apply {
+                input_private_key=this
+                text=privateKey
+            })
+
         }
         panel.add(tokenInput,BorderLayout.NORTH)
 
@@ -78,12 +103,22 @@ class ConfigureDialog(val project: Project?) : DialogWrapper(project, true) {
     override fun doOKAction() {
         super.doOKAction()
         if (selectedLang.isEmpty()) {
-            Messages.showErrorDialog("Please select the language you want to convert to", "Error")
+            Messages.showErrorDialog("Please select the target languages you want to convert to ", "Error")
         }
         val selectedLanguagesString = selectedLang.map { it.codeForApi }.joinToString()
-        PropertiesComponent.getInstance(project).setValue("key_to_languages", selectedLanguagesString)
+        properties.setValue("key_to_languages", selectedLanguagesString)
+
+        val appId=input_app_id.text.toString().trim()
+        val privateKey=input_private_key.text.toString().trim()
+
+        properties.setValue("key_app_id",appId)
+        properties.setValue("key_private_key",privateKey)
+
+        TranslateService(filePath,selectedLang,appId,privateKey).traslate()
 
     }
+
+
 
 }
 
